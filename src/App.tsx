@@ -12,8 +12,8 @@ function App() {
       <h1>table</h1>
       <Table />
       <Demo />
-      {/* <MapHere /> */}
-      <LibraryMap />
+      <MapHere />
+      {/* <LibraryMap /> */}
     </div>
   );
 }

@@ -10,73 +10,46 @@ export const MapHere = () => {
    * While `useEffect` could also be used here, `useLayoutEffect` will render
    * the map sooner
    */
+
   function addDraggableMarker(map: any, behavior: any, H: any) {
-    
-    
-    var marker = new H.map.Marker(
+    let polygon;
+    const marker = new H.map.Marker(
       { lat: 19.42847, lng: -99.12766 },
-      {
-        // mark the object as volatile for the smooth dragging
-        volatility: true,
-      }
+      { volatility: true }
     );
-    // Ensure that the marker can receive drag events
     marker.draggable = true;
     map.addObject(marker);
 
-    // disable the default draggability of the underlying map
-    // and calculate the offset between mouse and target's position
-    // when starting to drag a marker object:
+    // Add event listeners for marker movement
     map.addEventListener(
       "dragstart",
-      function (ev: any) {
-        var target = ev.target,
-          pointer = ev.currentPointer;
-        if (target instanceof H.map.Marker) {
-          var targetPosition = map.geoToScreen(target.getGeometry());
-          target["offset"] = new H.math.Point(
-            pointer.viewportX - targetPosition.x,
-            pointer.viewportY - targetPosition.y
-          );
-          behavior.disable();
-        }
+      (evt: any) => {
+        if (evt.target instanceof H.map.Marker) behavior.disable();
       },
       false
     );
-
-    // re-enable the default draggability of the underlying map
-    // when dragging has completed
     map.addEventListener(
       "dragend",
-      function (ev: any) {
-        var target = ev.target;
-        if (target && target.getGeometry) {
-          console.log(
-            "addDraggableMarker -> targetPosition",
-            target.getGeometry().lat,
-            target.getGeometry().lng
-          );
-        }
-        if (target instanceof H.map.Marker) {
+      (evt: any) => {
+        if (evt.target instanceof H.map.Marker) {
           behavior.enable();
+          console.log(
+            map.screenToGeo(
+              evt.currentPointer.viewportX,
+              evt.currentPointer.viewportY
+            )
+          );
         }
       },
       false
     );
-
-    // Listen to the drag event and move the position of the marker
-    // as necessary
     map.addEventListener(
       "drag",
-      function (ev: any) {
-        var target = ev.target,
-          pointer = ev.currentPointer;
-        if (target instanceof H.map.Marker) {
-          target.setGeometry(
-            map.screenToGeo(
-              pointer.viewportX - target["offset"].x,
-              pointer.viewportY - target["offset"].y
-            )
+      (evt: any) => {
+        const pointer = evt.currentPointer;
+        if (evt.target instanceof H.map.Marker) {
+          evt.target.setGeometry(
+            map.screenToGeo(pointer.viewportX, pointer.viewportY)
           );
         }
       },
@@ -117,7 +90,7 @@ export const MapHere = () => {
 
     // Create a marker using the previously instantiated icon:
     const marker = new H.map.Marker(LocationOfMarker, {
-      icon: pngIcon
+      icon: pngIcon,
     });
     // Add the marker to the map:
     hMap.addObject(marker);

@@ -4,6 +4,7 @@ import "./App.css";
 import { Table } from "./table";
 import Demo from "./time";
 import { MapHere } from "./map";
+import { LibraryMap } from "./map/libraryMap";
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       <h1>table</h1>
       <Table />
       <Demo />
-      <MapHere />
+      {/* <MapHere /> */}
+      <LibraryMap />
     </div>
   );
 }

@@ -1,8 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { Table } from './table';
-import Demo from './time';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { Table } from "./table";
+import Demo from "./time";
+import { MapHere } from "./map";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <h1>table</h1>
       <Table />
       <Demo />
+      <MapHere />
     </div>
   );
 }

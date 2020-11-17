@@ -48,7 +48,7 @@ export const Table = () => {
 
     const { field: sortField, direction: sortDirection } = sort;
 
-    console.log("onTableChange -> sort", sort)
+    console.log("onTableChange -> sort", sort);
     setPageIndex(pageIndex);
     setPageSize(pageSize);
     setSortField(sortField);
@@ -76,7 +76,10 @@ export const Table = () => {
 
   const toggleDetails = (item: Item) => {
     const itemIdToExpandedRowMapValues: any = { ...itemIdToExpandedRowMap };
-    console.log("toggleDetails -> itemIdToExpandedRowMapValues", itemIdToExpandedRowMap);
+    console.log(
+      "toggleDetails -> itemIdToExpandedRowMapValues",
+      itemIdToExpandedRowMap
+    );
     if (itemIdToExpandedRowMapValues[item.id]) {
       delete itemIdToExpandedRowMapValues[item.id];
     } else {
@@ -147,6 +150,12 @@ export const Table = () => {
     ],
     totalItemCount: 1,
   };
+  const getColorForOptions = (businessType: string): string => {
+    businessType = businessType.toLowerCase();
+    if (businessType === "odr") return "primary";
+    if (businessType === "sd") return "secondary";
+    return "otro_color";
+  };
 
   const columns: EuiBasicTableColumn<any>[] = [
     {
@@ -158,6 +167,20 @@ export const Table = () => {
         render: (date: any) => <>date</>,
         header: true,
       },
+    },
+    {
+      width: "40px",
+      isExpander: true,
+      render: (item: Item) => (
+        <>
+          <h1>{getColorForOptions("odr")}</h1>
+          <EuiButtonIcon
+            onClick={() => toggleDetails(item)}
+            aria-label={itemIdToExpandedRowMap[item.id] ? "Collapse" : "Expand"}
+            iconType={itemIdToExpandedRowMap[item.id] ? "arrowUp" : "arrowDown"}
+          />
+        </>
+      ),
     },
     {
       field: "lastName",
@@ -184,17 +207,6 @@ export const Table = () => {
           onClick: () => "",
         },
       ],
-    },
-    {
-      width: "40px",
-      isExpander: true,
-      render: (item: Item) => (
-        <EuiButtonIcon
-          onClick={() => toggleDetails(item)}
-          aria-label={itemIdToExpandedRowMap[item.id] ? "Collapse" : "Expand"}
-          iconType={itemIdToExpandedRowMap[item.id] ? "arrowUp" : "arrowDown"}
-        />
-      ),
     },
   ];
 
